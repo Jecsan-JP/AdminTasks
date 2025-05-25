@@ -5,6 +5,10 @@ export class SessionManager {
 
   constructor(private cookie: CookiesManager) {}
 
+  isAuthenticated(): boolean {
+    return !!this.getToken();
+  }
+
   setToken(token: string, millisExpiracy: number) {
     this.cookie.setValue({
       name: this.tokenKey,
@@ -14,7 +18,8 @@ export class SessionManager {
   }
 
   getToken(): string | undefined {
-    return this.cookie.getValue(this.tokenKey);
+    const token = this.cookie.getValue(this.tokenKey);
+    return token;
   }
 
   deleteSession(): void {

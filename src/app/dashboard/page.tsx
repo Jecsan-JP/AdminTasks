@@ -2,10 +2,12 @@
 import ProtectedRoute from '@/common/auth/ProtectedRoute';
 import DarshboardPage from '@/features/dashboard/presentation/pages/DarshboardPage';
 
-export default function Home() {
+const Dashboard = () => {
   return (
     <ProtectedRoute>
       <DarshboardPage />
     </ProtectedRoute>
   );
-}
+};
+
+export default Dashboard;
