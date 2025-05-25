@@ -37,7 +37,7 @@ export interface HttpManager {
   setToken(token: string | undefined): void;
 }
 
-// ESTOS YA SON MODELOS PROPIOS DE LA APP
+// ESTOS YA SON MODELOS PROPIOS DE LA APP O DE LA API
 export interface BaseHeaderDto {
   code: number | undefined;
   message: string | undefined;

@@ -11,11 +11,14 @@
   },
   "dependencies": {
     "@types/axios": "^0.14.4",
+    "@types/js-cookie": "^3.0.6",
     "axios": "^1.9.0",
+    "js-cookie": "^3.0.5",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "rxjs": "^7.8.2"
+    "rxjs": "^7.8.2",
+    "sweetalert2": "^11.21.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
