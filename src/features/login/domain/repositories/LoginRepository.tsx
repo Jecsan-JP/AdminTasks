@@ -7,12 +7,13 @@ export interface LoginRepository {
   login(dto: LoginRequestDto): Observable<LoginResponseDto>;
 }
 
-export class LoginRepositoryImpl implements LoginRepository {
+export class LoginDataRepository implements LoginRepository {
   private http: HttpManager;
 
   constructor(http: HttpManager) {
     this.http = http;
   }
+
   login(dto: LoginRequestDto): Observable<LoginResponseDto> {
     return this.http
       .post<LoginResponseDto>({

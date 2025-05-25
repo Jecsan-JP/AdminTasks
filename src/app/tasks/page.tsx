@@ -2,10 +2,12 @@
 import ProtectedRoute from '@/common/auth/ProtectedRoute';
 import TasksPage from '@/features/tasks/presentation/pages/TasksPage';
 
-export default function Home() {
+const Tasks = () => {
   return (
     <ProtectedRoute>
       <TasksPage />
     </ProtectedRoute>
   );
-}
+};
+
+export default Tasks;

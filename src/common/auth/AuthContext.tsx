@@ -21,13 +21,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = (token: string, millisExpiracy: number) => {
     sessionManager.setToken(token, millisExpiracy);
     setIsAuthenticated(true);
-    console.log('[AuthProvider] login: set isAuthenticated true');
   };
 
   const logout = () => {
     sessionManager.deleteSession();
     setIsAuthenticated(false);
-    console.log('[AuthProvider] logout: set isAuthenticated false');
   };
 
   return (

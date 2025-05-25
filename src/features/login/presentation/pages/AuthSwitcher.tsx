@@ -11,7 +11,7 @@ const AuthSwitcher = () => {
   const router = useRouter();
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/dashboard'); // O la ruta privada principal
+      router.push('/tasks'); // O la ruta privada principal
     }
   }, [isAuthenticated, router]);
   return (

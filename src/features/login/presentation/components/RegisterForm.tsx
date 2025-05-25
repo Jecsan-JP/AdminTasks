@@ -1,5 +1,5 @@
 // src/features/login/presentation/components/RegisterForm.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRegisterForm } from '../hooks/useRegisterForm';
 
 interface RegisterFormProps {
@@ -12,6 +12,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitch }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const { handleRegister, loading, error, success } = useRegisterForm();
+
+  useEffect(() => {
+    if (success) {
+      setUsername('');
+      setPassword('');
+      setConfirmPassword('');
+    }
+  }, [success]);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +89,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitch }) => {
       >
         {loading ? 'Creando...' : 'Registrarse'}
       </button>
-      <div className="mt-6 text-center">
+      <div className="mt-6 text-center text-black">
         ¿Ya tienes cuenta?{' '}
         <button
           className="font-semibold text-blue-600 hover:underline"

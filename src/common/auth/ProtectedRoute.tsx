@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
-  console.log('isAuthenticated desde protected route', isAuthenticated);
   useEffect(() => {
     // Solo redirige si isAuthenticated es exactamente false
     if (isAuthenticated === false) {

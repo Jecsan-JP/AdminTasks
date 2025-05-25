@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useAuth } from '@/common/auth/AuthContext';
-import { LoginRepositoryImpl } from '../../domain/repositories/LoginRepository';
+import { LoginDataRepository } from '../../domain/repositories/LoginRepository';
 import { http } from '@/common/singletons/http';
 import { LoginRequestDto } from '../../domain/models/LoginRequestDto';
 import { firstValueFrom } from 'rxjs';
 import { swalDataManager } from '@/common/presentation/di/di_frameworks';
 import { useRouter } from 'next/navigation';
 
-const loginRepository = new LoginRepositoryImpl(http);
+const loginRepository = new LoginDataRepository(http);
 
 interface JwtPayload {
   userId: string;
@@ -32,7 +32,7 @@ export function useAuthForm() {
       const decoded = jwtDecode<JwtPayload>(response.token);
       const expireIn = decoded.exp * 1000 - Date.now();
       login(response.token, expireIn);
-      router.push('/dashboard');
+      router.push('/tasks');
     } catch (err: any) {
       setError('Usuario o contraseña incorrectos ' + err);
       swalDataManager().showErrorMessage(
