@@ -1,19 +1,34 @@
+// src/features/tasks/presentation/components/TaskList.tsx
 import React, { useState } from 'react';
 import { Task } from '../../domain/models/Task';
 import TaskItem from './TaskItem';
 import Button from '@/common/presentation/components/Button';
 import Modal from '@/common/presentation/components/Modal';
+import TaskForm from './TaskForm';
+import { useTasks } from '../hooks/useTasks';
+import { useTaskFormCreate } from '../hooks/useTaskFormCreate';
+import { CreateTaskDto } from '../../domain/models/CreateTaskDto';
 
 interface TaskListProps {
   tasks: Task[];
 }
 
-const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
+const TaskList: React.FC<TaskListProps> = ({ tasks: initialTasks }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { tasks, fetchTasks } = useTasks();
+  const {
+    handleCreateTask: createTask,
+    loading: createLoading,
+    error: createError,
+    success: createSuccess,
+  } = useTaskFormCreate();
 
-  const handleCreateTask = () => {
-    // Lógica para crear la tarea (llamar hook/repositorio)
-    setIsModalOpen(false);
+  const handleCreateTask = async (task: Partial<Task>) => {
+    const newTask = await createTask(task as CreateTaskDto);
+    if (newTask) {
+      fetchTasks(); // Recargar la información
+      setIsModalOpen(false);
+    }
   };
 
   if (!tasks.length)
@@ -31,8 +46,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
         onClose={() => setIsModalOpen(false)}
         title="Nueva tarea"
       >
-        {/* <TaskForm onSubmit={handleCreateTask} /> */}
-        <>Formulario crear tarea</>
+        <TaskForm onSubmit={handleCreateTask} />
       </Modal>
     </div>
   );

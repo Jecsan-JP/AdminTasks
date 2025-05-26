@@ -1,3 +1,4 @@
+// src/features/tasks/presentation/hooks/useTasks.ts
 import { useEffect, useState } from 'react';
 import { firstValueFrom } from 'rxjs';
 import { http } from '@/common/singletons/http';
@@ -11,21 +12,22 @@ export function useTasks() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const fetchTasks = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const tasks = await firstValueFrom(tasksRepository.getTasks());
+      setTasks(tasks.tasks);
+    } catch (err: any) {
+      setError('No se pudieron cargar las tareas');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchTasks = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const tasks = await firstValueFrom(tasksRepository.getTasks());
-        setTasks(tasks.tasks);
-      } catch (err: any) {
-        setError('No se pudieron cargar las tareas');
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchTasks();
   }, []);
 
-  return { tasks, loading, error };
+  return { tasks, loading, error, fetchTasks };
 }

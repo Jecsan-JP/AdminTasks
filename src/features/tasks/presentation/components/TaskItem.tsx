@@ -23,6 +23,11 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, isSubtask }) => {
     setIsEditModalOpen(false);
   };
 
+  const handleDeleteTask = () => {
+    // Lógica para eliminar tarea (por ahora solo un console.log)
+    console.log('Eliminar tarea:', task._id);
+  };
+
   return (
     <div className="relative rounded-lg border bg-gray-50 p-4 shadow-sm">
       {/* Botón circular de editar */}
@@ -64,17 +69,25 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, isSubtask }) => {
         {/* Aquí puedes poner botones de editar/eliminar */}
       </div>
 
-      {/* SOLO en tareas principales */}
-      {!isSubtask && (
-        <div className="mt-4 flex gap-2">
+      {/* Botones de acción */}
+      <div className="mt-4 flex gap-2">
+        {/* Botón de subtarea SOLO en tareas principales */}
+        {!isSubtask && (
           <button
             className="rounded bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-200"
             onClick={() => setIsSubtaskModalOpen(true)}
           >
             + Subtarea
           </button>
-        </div>
-      )}
+        )}
+        {/* Botón de eliminar (aparece en tareas y subtareas) */}
+        <button
+          className="rounded bg-red-100 px-3 py-1 text-xs font-semibold text-red-700 hover:bg-red-200"
+          onClick={handleDeleteTask}
+        >
+          - Eliminar {isSubtask ? 'subtarea' : 'tarea'}
+        </button>
+      </div>
 
       <Modal
         isOpen={isSubtaskModalOpen}
