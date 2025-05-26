@@ -9,6 +9,8 @@ import TaskForm from './TaskForm';
 import { CreateTaskDto } from '../../domain/models/CreateTaskDto';
 import { useTasksContext } from '../context/TasksProvider';
 import { useTaskDelete } from '../hooks/useTaskDelete';
+import CommentForm from './CommentForm';
+import { useCommentFormCreate } from '../hooks/useCommentFormCreate';
 
 interface TaskItemProps {
   task: Task;
@@ -18,6 +20,7 @@ interface TaskItemProps {
 const TaskItem: React.FC<TaskItemProps> = ({ task, isSubtask }) => {
   const [isSubtaskModalOpen, setIsSubtaskModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const { refreshTasks } = useTasksContext();
 
   // Usamos el hook y renombramos la función
@@ -27,6 +30,12 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, isSubtask }) => {
     error: createError,
     success: createSuccess,
   } = useSubtaskFormCreate();
+  const {
+    handleCreateComment,
+    loading: commentLoading,
+    error: commentError,
+    success: commentSuccess,
+  } = useCommentFormCreate();
 
   const { handleDeleteTask: deleteTask, loading: deleteLoading } = useTaskDelete();
 
@@ -35,6 +44,14 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, isSubtask }) => {
     if (newSubtask) {
       refreshTasks();
       setIsSubtaskModalOpen(false);
+    }
+  };
+
+  const handleAddComment = async ({ content }: { content: string }) => {
+    const result = await handleCreateComment(task._id, content);
+    if (result) {
+      refreshTasks(); // Refresca la lista de tareas y comentarios
+      setIsCommentModalOpen(false); // Cierra el modal si quieres
     }
   };
 
@@ -92,12 +109,20 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, isSubtask }) => {
       <div className="mt-4 flex gap-2">
         {/* Botón de subtarea SOLO en tareas principales */}
         {!isSubtask && (
-          <button
-            className="rounded bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-200"
-            onClick={() => setIsSubtaskModalOpen(true)}
-          >
-            + Subtarea
-          </button>
+          <>
+            <button
+              className="rounded bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-200"
+              onClick={() => setIsSubtaskModalOpen(true)}
+            >
+              + Subtarea
+            </button>
+            <button
+              className="rounded bg-green-100 px-3 py-1 text-xs font-semibold text-green-700 hover:bg-green-200"
+              onClick={() => setIsCommentModalOpen(true)}
+            >
+              + Comentario
+            </button>
+          </>
         )}
         {/* Botón de eliminar (aparece en tareas y subtareas) */}
         <button
@@ -114,6 +139,13 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, isSubtask }) => {
         title="Nueva subtarea"
       >
         <TaskForm onSubmit={handleCreateSubtask} />
+      </Modal>
+      <Modal
+        isOpen={isCommentModalOpen}
+        onClose={() => setIsCommentModalOpen(false)}
+        title="Nuevo comentario"
+      >
+        <CommentForm onSubmit={handleAddComment} />
       </Modal>
 
       {/* Subtareas */}

@@ -17,6 +17,7 @@ export class TasksDataRepository implements TasksRepository {
   constructor(http: HttpManager) {
     this.http = http;
   }
+
   createSubtask(task: CreateTaskDto): Observable<CreateTaskDto> {
     return this.http.post<CreateTaskDto>({
       endpoint: '/tasks',
@@ -34,6 +35,7 @@ export class TasksDataRepository implements TasksRepository {
       endpoint: '/tasks',
     });
   }
+
   createTask(task: CreateTaskDto): Observable<CreateTaskDto> {
     return this.http.post<CreateTaskDto>({
       endpoint: '/tasks',
