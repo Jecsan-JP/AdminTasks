@@ -1,8 +1,10 @@
+// src/features/tasks/presentation/pages/TasksPage.tsx
 import React from 'react';
 import { useTasks } from '../hooks/useTasks';
 import TaskList from '../components/TaskList';
+import { TasksProvider } from '../context/TasksProvider';
 
-const TasksPage = () => {
+const TasksContent = () => {
   const { tasks, loading, error } = useTasks();
 
   return (
@@ -12,9 +14,16 @@ const TasksPage = () => {
         {loading && <div className="text-center">Cargando tareas...</div>}
         {error && <div className="text-center text-red-500">{error}</div>}
         <TaskList tasks={tasks} />
-        {/* Aquí puedes agregar un botón para crear nueva tarea */}
       </div>
     </div>
+  );
+};
+
+const TasksPage = () => {
+  return (
+    <TasksProvider>
+      <TasksContent />
+    </TasksProvider>
   );
 };
 

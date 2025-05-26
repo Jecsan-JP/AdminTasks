@@ -4,6 +4,11 @@ import { Task } from '../../domain/models/Task';
 import CommentList from './CommentList';
 import Modal from '@/common/presentation/components/Modal';
 import EditTaskModal from './EditTaskModal';
+import { useSubtaskFormCreate } from '../hooks/useSubtaskFormCreate';
+import TaskForm from './TaskForm';
+import { CreateTaskDto } from '../../domain/models/CreateTaskDto';
+import { useTasksContext } from '../context/TasksProvider';
+import { useTaskDelete } from '../hooks/useTaskDelete';
 
 interface TaskItemProps {
   task: Task;
@@ -13,9 +18,24 @@ interface TaskItemProps {
 const TaskItem: React.FC<TaskItemProps> = ({ task, isSubtask }) => {
   const [isSubtaskModalOpen, setIsSubtaskModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const { refreshTasks } = useTasksContext();
 
-  const handleCreateSubtask = () => {
-    setIsSubtaskModalOpen(false);
+  // Usamos el hook y renombramos la función
+  const {
+    handleCreateSubtask: createSubtask,
+    loading: createLoading,
+    error: createError,
+    success: createSuccess,
+  } = useSubtaskFormCreate();
+
+  const { handleDeleteTask: deleteTask, loading: deleteLoading } = useTaskDelete();
+
+  const handleCreateSubtask = async (subtask: Partial<Task>) => {
+    const newSubtask = await createSubtask(subtask as CreateTaskDto, task._id);
+    if (newSubtask) {
+      refreshTasks();
+      setIsSubtaskModalOpen(false);
+    }
   };
 
   const handleEditTask = () => {
@@ -23,9 +43,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, isSubtask }) => {
     setIsEditModalOpen(false);
   };
 
-  const handleDeleteTask = () => {
-    // Lógica para eliminar tarea (por ahora solo un console.log)
-    console.log('Eliminar tarea:', task._id);
+  const handleDeleteTask = async () => {
+    await deleteTask(task._id);
   };
 
   return (
@@ -94,8 +113,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, isSubtask }) => {
         onClose={() => setIsSubtaskModalOpen(false)}
         title="Nueva subtarea"
       >
-        {/* <TaskForm onSubmit={handleCreateSubtask} /> */}
-        <>Formulario crear subtarea</>
+        <TaskForm onSubmit={handleCreateSubtask} />
       </Modal>
 
       {/* Subtareas */}
@@ -119,7 +137,6 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, isSubtask }) => {
         onClose={() => setIsEditModalOpen(false)}
         task={task}
         isSubtask={isSubtask}
-        onSave={handleEditTask}
       />
     </div>
   );

@@ -14,7 +14,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const auth = sessionManager.isAuthenticated();
-    console.log('[AuthProvider] isAuthenticated al montar:', auth);
     setIsAuthenticated(auth);
   }, []);
 
