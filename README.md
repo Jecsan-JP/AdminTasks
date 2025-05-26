@@ -36,8 +36,7 @@ yarn install
 3. Configura las variables de entorno:
 Crea un archivo `.env.local` en la raíz del proyecto con las siguientes variables:
 ```env
-MONGODB_URI=tu_uri_de_mongodb
-JWT_SECRET=tu_secreto_jwt
+NEXT_PUBLIC_BASE_URL_TASKS=urlexample.com
 ```
 
 4. Inicia el servidor de desarrollo:
